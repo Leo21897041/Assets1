@@ -12,6 +12,12 @@ public class BuddyController : MonoBehaviour
     private float inputX = 0;
     private float facing = 1; // 1 = Right <<<>>> -1 = Left
     private bool isGrounded;
+
+    //Raycasting
+    public Transform groundCheckPosition;
+    float groundCheckLength = 0.25f;
+    //Direction -->> Vector2.up
+    public LayerMask groundCheckLayerMask;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,7 +50,16 @@ public class BuddyController : MonoBehaviour
             spriteRenderer.flipX = true;
         }
 
-        if (Input.GetButtonDown("Jump"))
+        RaycastHit2D hit = (Physics2D.Raycast(groundCheckPosition.position, Vector2.down, groundCheckLength, groundCheckLayerMask));
+        if (hit.collider != null)
+        {
+            isGrounded = true;
+        }
+        else 
+        {
+            isGrounded = false;
+        }
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
