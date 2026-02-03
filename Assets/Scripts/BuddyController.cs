@@ -59,9 +59,16 @@ public class BuddyController : MonoBehaviour
         {
             isGrounded = false;
         }
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+
+        if (animator)
+        {
+            animator.SetFloat("moveX", Mathf.Abs(rigidBody.linearVelocityX));
+            animator.SetBool("isJumping", !isGrounded);
         }
     }
 
